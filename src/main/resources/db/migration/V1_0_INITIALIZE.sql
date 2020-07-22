@@ -1,20 +1,21 @@
 CREATE TABLE customer (
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
-    name varchar(255) NOT NULL,
+    name varchar(255) NOT NULL UNIQUE,
     active tinyint(1) unsigned NOT NULL DEFAULT '1',
     PRIMARY KEY (id)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-CREATE TABLE val_or_inval_customer (
+CREATE TABLE request_stats (
     id int(11) unsigned NOT NULL AUTO_INCREMENT,
     customer_id int(11) unsigned NOT NULL,
-    name varchar(255) NOT NULL,
-    time DATETIME NOT NULL
-         DEFAULT CURRENT_TIMESTAMP,
-    request_validation_status ENUM ('valid','invalid') NULL,
+    time datetime DEFAULT CURRENT_TIMESTAMP,
+    is_valid boolean DEFAULT true,
     PRIMARY KEY (id),
-    FOREIGN KEY (customer_id) REFERENCES customer(id) ON DELETE CASCADE
+    UNIQUE KEY unique_customer_time (customer_id,time),
+    KEY customer_idx (customer_id),
+    CONSTRAINT stats_customer_id
+    FOREIGN KEY (customer_id) REFERENCES customer (id) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
@@ -31,7 +32,7 @@ CREATE TABLE ua_blacklist (
   DEFAULT CHARSET = utf8;
 
 INSERT INTO customer (id, name, active)
-VALUES (1,'Big News Media Corp',1),
+VALUES (1,'Big News Media Corp',1);
        (2,'Online Mega Store',1),
        (3,'Nachoroo Delivery',0),
        (4,'Euro Telecom Group',1);
