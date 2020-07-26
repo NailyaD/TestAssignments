@@ -5,6 +5,9 @@ import org.homeprog.customerrequestsstat.repository.StatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.util.List;
+
 @Service
 public class StatService {
 
@@ -19,20 +22,21 @@ public class StatService {
         return statRepo.save(statCustomer);
     }
 
-    /*TODO
-    public List<StatCustomer> getCustomerStatisticsByDate(Long id, Date dateAndTime) {
-        return statRepo.findAllByCustomer_IdAndTime(id, dateAndTime);
-    }*/
+    public List<StatCustomer> getStatCustomersByCustomerIdAndTimeBetweenTwoDates(long id, Instant dateFrom, Instant dateTo) {
+        return statRepo.findAllStatCustomersByCustomerIdAndTimeBetween(id, dateFrom, dateTo);
+    }
 
-    /*public List<StatCustomer> getCustomerStatisticsByValidationStatus(Long id, boolean isValid) {
-        return statRepo.findAll();
-    }*/
+    public List<StatCustomer> getStatCustomersByCustomerIdAndRequestStatus(Long customerId, boolean isValid) {
+        return statRepo.findAllStatCustomersByCustomerIdAndIsValid(customerId, isValid);
+    }
 
-    /*public List<StatCustomer> getCustomerStatisticsByDateAndValidationStatus(Long id, Date date, boolean isValid) {
-        return statRepo.findAll();
-    }*/
+    public List<StatCustomer> getStatCustomersByCustomerIdAndRequestStatusAndTimeBetweenTwoDates
+           (Long id, boolean isValid, Instant dateFrom, Instant dateTo) {
+        return statRepo.findAllStatCustomersByCustomerIdAndIsValidAndTimeBetween(id, isValid, dateFrom, dateTo);
+    }
 
-    /*public boolean isValid(StatCustomer statCustomer) {
+      //TODO
+    /*public boolean isValidRequest(StatCustomer statCustomer) {
         return true;
     }*/
 }
