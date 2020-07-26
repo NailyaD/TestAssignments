@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -26,5 +26,8 @@ public class StatCustomerDTO {
     @JsonProperty("userID")
     private String userAgent;
 
-    private Date time;
+    @JsonProperty("timestamp")
+    private Instant time;
+
+    private boolean isValid;
 }
