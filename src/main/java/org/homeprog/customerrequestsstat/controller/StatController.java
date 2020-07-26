@@ -5,11 +5,15 @@ import org.homeprog.customerrequestsstat.entity.StatCustomer;
 import org.homeprog.customerrequestsstat.service.StatService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class StatController {
@@ -17,6 +21,7 @@ public class StatController {
     private final StatService service;
     private final ModelMapper modelMapper;
 
+    @Autowired
     public StatController(StatService service, ModelMapper modelMapper) {
         this.service = service;
         this.modelMapper = modelMapper;
@@ -27,28 +32,53 @@ public class StatController {
     @PostMapping("/api/customers")
     public StatCustomer addStatCustomer(@RequestBody StatCustomerDTO statCustomerDTO) {
         StatCustomer statCustomer = modelMapper.map(statCustomerDTO, StatCustomer.class);
-        Date dateAndTime = new Date();
-        statCustomer.setTime(dateAndTime);
-        statCustomer.setValid(true);
+        statCustomer.setValid(false);
         return service.addStatCustomer(statCustomer);
     }
 
-    /*TODO
-    @GetMapping("/api/stats?customer_id={id}&time={date}")
-    public List<StatCustomer> getCustomerStatisticsByDate(@PathVariable long id, @PathVariable Date date) {
-        return service.getCustomerStatisticsByDate(id, date);
-    }*/
+    //Date parameters shall be passed as "yyyy-MM-dd HH:mm:ss"
+    @GetMapping("/api/stats/{customer_id}/from/{date_from}/to/{date_to}")
+    public List<StatCustomerDTO> getCustomersByCustomerIdAndTimePeriod(@PathVariable("customer_id") long id,
+                                                                 @PathVariable("date_from")
+                                                                 String fromDate,
+                                                                 @PathVariable("date_to")
+                                                                 String toDate) {
+        Instant instantFrom = stringToInstantConverter(fromDate);
+        Instant instantTo = stringToInstantConverter(toDate);
 
-    /*@GetMapping("/api/stats?customer_id={id}&validation_status={validation_status}")
-    public List<StatCustomer> getCustomerStatisticsByValidationStatus() {
-        return service.getCustomerStatisticsByValidationStatus();
-        &date={date}
-    }*/
+        List<StatCustomer> statCustomers = service
+                           .getStatCustomersByCustomerIdAndTimeBetweenTwoDates(id, instantFrom, instantTo);
 
-    /*@GetMapping("/api/stats?customer_id={id}&date={date}&validation_status={validation_status}")
-    public List<StatCustomer> getCustomerStatisticsByDateAndValidationStatus() {
-        return service.getCustomerStatisticsByDateAndValidationStatus();
-    }*/
+        return  statCustomers.stream().map(customer -> modelMapper
+                .map(customer, StatCustomerDTO.class)).collect(Collectors.toList());
+    }
+
+    @GetMapping("/api/stats/{customer_id}/statuses/{request_status}")
+    public List<StatCustomerDTO> getCustomersByCustomerIdAndRequestStatus(@PathVariable("customer_id") long id,
+                                                                          @PathVariable("request_status") boolean isValid) {
+        List<StatCustomer> statCustomers = service.getStatCustomersByCustomerIdAndRequestStatus(id, isValid);
+
+        return  statCustomers.stream().map(customer -> modelMapper
+                .map(customer, StatCustomerDTO.class)).collect(Collectors.toList());
+    }
+
+    //Date parameters shall be passed as "yyyy-MM-dd HH:mm:ss"
+    @GetMapping("/api/stats/{customer_id}/statuses/{request_status}/from/{date_from}/to/{date_to}")
+    public List<StatCustomerDTO> getCustomersByCustomerIdAndRequestStatusAndTimePeriod
+                                 (@PathVariable("customer_id") long id,
+                                  @PathVariable("request_status") boolean isValid,
+                                  @PathVariable("date_from") String fromDate,
+                                  @PathVariable("date_to") String toDate) {
+
+        Instant instantFrom = stringToInstantConverter(fromDate);
+        Instant instantTo = stringToInstantConverter(toDate);
+
+        List<StatCustomer> statCustomers = service
+                          .getStatCustomersByCustomerIdAndRequestStatusAndTimeBetweenTwoDates(id, isValid, instantFrom, instantTo);
+
+        return  statCustomers.stream().map(customer -> modelMapper
+                .map(customer, StatCustomerDTO.class)).collect(Collectors.toList());
+    }
 
     PropertyMap<StatCustomerDTO, StatCustomer> statCustomerMapping = new PropertyMap<StatCustomerDTO, StatCustomer>() {
         protected void configure() {
@@ -61,4 +91,11 @@ public class StatController {
             map().setCustomerId(source.getCustomer().getId());
         }
     };
+
+    public Instant stringToInstantConverter(String string) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        LocalDate localDateFrom = LocalDate.parse(string, formatter);
+        return localDateFrom.atStartOfDay(ZoneId.systemDefault()).toInstant();
+    }
 }
