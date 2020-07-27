@@ -31,7 +31,7 @@ public class StatCustomer {
     private boolean isValid;
 
     @Transient
-    private String remoteIp;
+    private Long remoteIp;
 
     @Transient
     private String userAgent;

@@ -21,7 +21,7 @@ public class StatCustomerDTO {
     private Long customerId;
 
     @JsonProperty("remoteIP")
-    private String remoteIp;
+    private Long remoteIp;
 
     @JsonProperty("userID")
     private String userAgent;
