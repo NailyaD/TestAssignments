@@ -32,8 +32,8 @@ public class StatController {
     @PostMapping("/api/customers")
     public StatCustomer addStatCustomer(@RequestBody StatCustomerDTO statCustomerDTO) {
         StatCustomer statCustomer = modelMapper.map(statCustomerDTO, StatCustomer.class);
-        statCustomer.setValid(false);
-        return service.addStatCustomer(statCustomer);
+        Long customerId = statCustomerDTO.getCustomerId();
+        return service.addStatCustomer(customerId, statCustomer);
     }
 
     //Date parameters shall be passed as "yyyy-MM-dd HH:mm:ss"
