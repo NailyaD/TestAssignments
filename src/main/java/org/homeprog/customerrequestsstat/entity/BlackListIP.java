@@ -15,5 +15,5 @@ public class BlackListIP {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ip")
-    private Long ip;
+    private String ip;
 }
