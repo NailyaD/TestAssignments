@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BlackListIPRepository extends JpaRepository<BlackListIP, Long> {
-    boolean existsBlackListIPByIp(Long ip);
+public interface BlackListIPRepository extends JpaRepository<BlackListIP, String> {
+    boolean existsBlackListIPByIp(String ip);
 }
