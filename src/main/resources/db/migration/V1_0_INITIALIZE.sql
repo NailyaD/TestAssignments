@@ -20,7 +20,7 @@ CREATE TABLE request_stats (
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE ip_blacklist (
-    ip int(11) unsigned NOT NULL,
+    ip varchar(255) NOT NULL,
     PRIMARY KEY (ip)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -32,15 +32,15 @@ CREATE TABLE ua_blacklist (
   DEFAULT CHARSET = utf8;
 
 INSERT INTO customer (id, name, active)
-VALUES (1,'Big News Media Corp',1);
+VALUES (1,'Big News Media Corp',1),
        (2,'Online Mega Store',1),
        (3,'Nachoroo Delivery',0),
        (4,'Euro Telecom Group',1);
 
 INSERT INTO ip_blacklist (ip)
-VALUES (0),
-       (2130706433),
-       (4294967295);
+VALUES ('0'),
+       ('213.070.64.33'),
+       ('429.496.72.95');
 
 INSERT INTO ua_blacklist (ua)
 VALUES ('A6-Indexer'),
