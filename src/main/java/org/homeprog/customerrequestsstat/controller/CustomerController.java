@@ -1,7 +1,7 @@
 package org.homeprog.customerrequestsstat.controller;
 
-import org.homeprog.customerrequestsstat.DTO.StatCustomerDTO;
-import org.homeprog.customerrequestsstat.entity.StatCustomer;
+import org.homeprog.customerrequestsstat.DTO.CustomerDTO;
+import org.homeprog.customerrequestsstat.entity.Customer;
 import org.homeprog.customerrequestsstat.service.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 public class CustomerController {
@@ -19,26 +21,26 @@ public class CustomerController {
     public CustomerController(CustomerService customerService, ModelMapper modelMapper) {
         this.customerService = customerService;
         this.modelMapper = modelMapper;
-        this.modelMapper.addMappings(statCustomerMapping);
-        this.modelMapper.addMappings(statCustomerIdMapping);
+        this.modelMapper.addMappings(customerMapping);
+        this.modelMapper.addMappings(customerIdMapping);
     }
 
     @PostMapping("/api/customers")
-    public StatCustomer addStatCustomer(@RequestBody StatCustomerDTO statCustomerDTO) {
-        StatCustomer statCustomer = modelMapper.map(statCustomerDTO, StatCustomer.class);
-        Long customerId = statCustomerDTO.getCustomerId();
-        return customerService.addStatCustomer(customerId, statCustomer);
+    public Customer addCustomer(@RequestBody @Valid CustomerDTO customerDTO) {
+        Customer customer = modelMapper.map(customerDTO, Customer.class);
+        Long customerId = customerDTO.getCustomerId();
+        return customerService.addCustomer(customerId, customer);
     }
 
-    PropertyMap<StatCustomerDTO, StatCustomer> statCustomerMapping = new PropertyMap<StatCustomerDTO, StatCustomer>() {
+    PropertyMap<CustomerDTO, Customer> customerMapping = new PropertyMap<CustomerDTO, Customer>() {
         protected void configure() {
-            map().getCustomer().setId(source.getCustomerId());
+            map().getDbCustomer().setId(source.getCustomerId());
         }
     };
 
-    PropertyMap<StatCustomer, StatCustomerDTO> statCustomerIdMapping = new PropertyMap<StatCustomer, StatCustomerDTO>() {
+    PropertyMap<Customer, CustomerDTO> customerIdMapping = new PropertyMap<Customer, CustomerDTO>() {
         protected void configure() {
-            map().setCustomerId(source.getCustomer().getId());
+            map().setCustomerId(source.getDbCustomer().getId());
         }
     };
 }
