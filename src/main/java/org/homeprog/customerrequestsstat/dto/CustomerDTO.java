@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.homeprog.customerrequestsstat.validation.NonEmptyValues;
+import org.homeprog.customerrequestsstat.validation.NonNullValues;
 import org.springframework.lang.Nullable;
 
 import java.time.LocalDateTime;
@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NonEmptyValues
+@NonNullValues
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class StatCustomerDTO {
+public class CustomerDTO {
     @Nullable
     private Long id;
 
