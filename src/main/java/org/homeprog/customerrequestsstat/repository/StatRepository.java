@@ -1,14 +1,14 @@
 package org.homeprog.customerrequestsstat.repository;
 
-import org.homeprog.customerrequestsstat.entity.StatCustomer;
+import org.homeprog.customerrequestsstat.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
-public interface StatRepository extends JpaRepository<StatCustomer, Long> {
-    List<StatCustomer> findAllStatCustomersByCustomerIdAndTimeBetween(Long id, Instant dateFrom, Instant dateTo);
-    List<StatCustomer> findAllStatCustomersByCustomerIdAndIsValid(Long id, Boolean isValid);
-    List<StatCustomer> findAllStatCustomersByCustomerIdAndIsValidAndTimeBetween
-                       (Long id, Boolean isValid, Instant dateFrom, Instant dateTo);
+public interface StatRepository extends JpaRepository<Customer, Long> {
+    List<Customer> findAllCustomersByDbCustomerIdAndTimeBetween(Long id, LocalDateTime dateFrom, LocalDateTime dateTo);
+    List<Customer> findAllCustomersByDbCustomerIdAndIsValid(Long id, Boolean isValid);
+    List<Customer> findAllCustomersByDbCustomerIdAndIsValidAndTimeBetween
+                       (Long id, Boolean isValid, LocalDateTime dateFrom, LocalDateTime dateTo);
 }

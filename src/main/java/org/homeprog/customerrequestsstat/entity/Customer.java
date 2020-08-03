@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "request_stats", uniqueConstraints={@UniqueConstraint(columnNames = {"customer_id" , "time"})})
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class StatCustomer {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -22,7 +22,7 @@ public class StatCustomer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private DBCustomer dbCustomer;
 
     @Column(name="time", columnDefinition="DATETIME")
     private LocalDateTime time;

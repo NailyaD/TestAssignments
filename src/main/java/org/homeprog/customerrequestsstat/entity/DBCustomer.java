@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "customer")
-public class Customer {
+public class DBCustomer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
@@ -29,5 +29,5 @@ public class Customer {
             orphanRemoval = true
     )
     @JoinColumn(name = "customer_id")
-    private List<StatCustomer> customers;
+    private List<Customer> customers;
 }
