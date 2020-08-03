@@ -26,6 +26,7 @@ public class StatController {
         this.modelMapper = modelMapper;
     }
 
+    //A method for Get request to receive statistics about a certain customer by customer id and for a certain period of time
     //Date parameters shall be passed as "yyyy-MM-dd HH:mm:ss"
     @GetMapping("/api/stats/{customer_id}/from/{date_from}/to/{date_to}")
     public List<CustomerDTO> getCustomersByCustomerIdAndTimePeriod(@PathVariable("customer_id") long id,
@@ -40,6 +41,8 @@ public class StatController {
                 .map(customer, CustomerDTO.class)).collect(Collectors.toList());
     }
 
+    //A method for Get request to receive statistics about a certain customer by customer id and request status value
+    //(for example, all valid/invalid requests of a certain customer)
     @GetMapping("/api/stats/{customer_id}/statuses/{request_status}")
     public List<CustomerDTO> getCustomersByCustomerIdAndRequestStatus(@PathVariable("customer_id") long id,
                                                                       @PathVariable("request_status") boolean isValid) {
@@ -49,6 +52,9 @@ public class StatController {
                 .map(customer, CustomerDTO.class)).collect(Collectors.toList());
     }
 
+    //A method for Get request to receive statistics about a certain customer by customer id, request status
+    //and for a certain period of time
+    //(for example, all valid/invalid requests of a certain customer for a certain timespan)
     //Date parameters shall be passed as "yyyy-MM-dd HH:mm:ss"
     @GetMapping("/api/stats/{customer_id}/statuses/{request_status}/from/{date_from}/to/{date_to}")
     public List<CustomerDTO> getCustomersByCustomerIdAndRequestStatusAndTimePeriod

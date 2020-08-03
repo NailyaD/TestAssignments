@@ -17,8 +17,12 @@ public class ValidationService {
         this.userAgentBlackListRule = userAgentBlackListRule;
     }
 
+    //A method that allows setting a valid status of a request as true/false depending on
+    // presence JSON userID/remoteIP values in corresponding blacklists
     public void isValidRequest(Customer customer) {
         ipAddressBlackListRule.validate(customer);
-        userAgentBlackListRule.validate(customer);
+        if (customer.isValid()) {
+            userAgentBlackListRule.validate(customer);
+        }
     }
 }

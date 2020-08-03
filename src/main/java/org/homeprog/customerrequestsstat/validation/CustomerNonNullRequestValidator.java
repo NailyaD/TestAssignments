@@ -5,6 +5,7 @@ import org.homeprog.customerrequestsstat.DTO.CustomerDTO;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
+//A validator that allows rejecting all invalid requests (requests that contain null or empty values)
 public class CustomerNonNullRequestValidator implements ConstraintValidator<NonNullValues, CustomerDTO> {
 
     @Override
